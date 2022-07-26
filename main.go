@@ -2,25 +2,25 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/mux"
 	"net/http"
 )
 
-func handlerFunc(w http.ResponseWriter, r *http.Request) {
+func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprint(w, "<h1>Welcome to Venkata Karthikeya World !!! </h1>")
+}
 
-	if r.URL.Path == "/" {
-		fmt.Fprint(w, "<h1> Welcome to Awesome site !!! </h1>")
-	} else if r.URL.Path == "/contact" {
-		fmt.Fprint(w, "To get in touch, please send an email to <a href=\"mailto:support@karthikeya.com\">support@karthikeya.com</a>.")
-	} else {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprint(w, "<h1>We could not find the page you were looking for :(</h1><p>Please email us if you keep being sent to an invalid page.</p>")
-	}
-
+func contact(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprint(w, "To get in touch, please send an email to <a href=\"mailto:support@karthikeya.com\">support@karthikeya.com</a>.")
 }
 
 func main() {
-	http.HandleFunc("/", handlerFunc)
+	r := mux.NewRouter()
+	r.HandleFunc("/", home)
+	r.HandleFunc("/contact", contact)
+
 	fmt.Println("Web Server started")
-	http.ListenAndServe(":4949", nil)
+	http.ListenAndServe(":4949", r)
 }
