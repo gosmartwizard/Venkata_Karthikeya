@@ -14,9 +14,9 @@
 {{end}}
 
 {{define "signupForm"}}
-    <form>
+    <form action="/signup" method="POST">
         <div class="form-group">
-            <label for="email">E-Mail Address</label>
+            <label for="email">Email address</label>
             <input type="email" name="email" class="form-control" id="email" placeholder="Email">
         </div>
         <div class="form-group">
@@ -26,4 +26,3 @@
         <button type="submit" class="btn btn-primary">Sign Up</button>
     </form>
 {{end}}
-
