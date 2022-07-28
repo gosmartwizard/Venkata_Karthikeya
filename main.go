@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/gosmartwizard/Venkata_Karthikeya/controllers"
 	"github.com/gosmartwizard/Venkata_Karthikeya/views"
 	"net/http"
 )
@@ -10,7 +11,6 @@ import (
 var (
 	homeView    *views.View
 	contactView *views.View
-	signupView  *views.View
 )
 
 func must(err error) {
@@ -40,22 +40,17 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "<h1>Sorry, but we couldn't find the page you were looking for</h1>")
 }
 
-func signup(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	must(signupView.Render(w, nil))
-}
-
 func main() {
 	homeView = views.NewView("bootstrap", "views/home.gohtml")
 	contactView = views.NewView("bootstrap", "views/contact.gohtml")
-	signupView = views.NewView("bootstrap", "views/signup.gohtml")
+	usersC := controllers.NewUsers()
 
 	r := mux.NewRouter()
 	r.NotFoundHandler = http.HandlerFunc(notFound)
 	r.HandleFunc("/", home)
 	r.HandleFunc("/contact", contact)
 	r.HandleFunc("/faq", faq)
-	r.HandleFunc("/signup", signup)
+	r.HandleFunc("/signup", usersC.New)
 
 	fmt.Println("Web Server started")
 	http.ListenAndServe(":4949", r)
