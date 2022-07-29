@@ -46,11 +46,16 @@ func main() {
 
 	r := mux.NewRouter()
 	r.NotFoundHandler = http.HandlerFunc(notFound)
+
 	r.Handle("/", staticC.Home).Methods("GET")
+
 	r.Handle("/contact", staticC.Contact).Methods("GET")
 
 	r.HandleFunc("/signup", usersC.New).Methods("GET")
 	r.HandleFunc("/signup", usersC.Create).Methods("POST")
+
+	r.Handle("/login", usersC.LoginView).Methods("GET")
+	r.HandleFunc("/login", usersC.Login).Methods("POST")
 
 	fmt.Println("Web Server started")
 	http.ListenAndServe(":4949", r)
