@@ -4,7 +4,16 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/gosmartwizard/Venkata_Karthikeya/controllers"
+	"github.com/gosmartwizard/Venkata_Karthikeya/models"
 	"net/http"
+)
+
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "jon"
+	password = "your-password"
+	dbname   = "lenslocked_dev"
 )
 
 func must(err error) {
@@ -25,8 +34,15 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+	us, err := models.NewUserService(psqlInfo)
+	must(err)
+	defer us.Close()
+	us.AutoMigrate()
+
 	staticC := controllers.NewStatic()
-	usersC := controllers.NewUsers()
+	usersC := controllers.NewUsers(us)
 
 	r := mux.NewRouter()
 	r.NotFoundHandler = http.HandlerFunc(notFound)
