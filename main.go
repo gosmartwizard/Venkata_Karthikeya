@@ -11,9 +11,9 @@ import (
 const (
 	host     = "localhost"
 	port     = 5432
-	user     = "jon"
-	password = "your-password"
-	dbname   = "lenslocked_dev"
+	user     = "baloo"
+	password = "junglebook"
+	dbname   = "lenslocked"
 )
 
 func must(err error) {
