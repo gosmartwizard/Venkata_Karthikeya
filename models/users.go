@@ -43,27 +43,36 @@ type UserDB interface {
 	DestructiveReset() error
 }
 
-type UserService struct {
+type UserService interface {
+	Authenticate(email, password string) (*User, error)
 	UserDB
 }
+
+type userService struct {
+	UserDB
+}
+
+var _ UserService = &userService{}
 
 type userValidator struct {
 	UserDB
 }
 
-var _ UserDB = &userGorm{}
+var _ UserDB = &userValidator{}
 
 type userGorm struct {
 	db   *gorm.DB
 	hmac hash.HMAC
 }
 
-func NewUserService(connectionInfo string) (*UserService, error) {
+var _ UserDB = &userGorm{}
+
+func NewUserService(connectionInfo string) (UserService, error) {
 	ug, err := newUserGorm(connectionInfo)
 	if err != nil {
 		return nil, err
 	}
-	return &UserService{
+	return &userService{
 		UserDB: &userValidator{
 			UserDB: ug,
 		},
@@ -107,7 +116,7 @@ func (ug *userGorm) ByRemember(token string) (*User, error) {
 	return &user, nil
 }
 
-func (us *UserService) Authenticate(email, password string) (*User, error) {
+func (us *userService) Authenticate(email, password string) (*User, error) {
 	foundUser, err := us.ByEmail(email)
 	if err != nil {
 		return nil, err
