@@ -1,7 +1,6 @@
 package models
 
 import (
-	"errors"
 	"github.com/gosmartwizard/Venkata_Karthikeya/hash"
 	"github.com/gosmartwizard/Venkata_Karthikeya/rand"
 	"github.com/jinzhu/gorm"
@@ -9,19 +8,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"regexp"
 	"strings"
-)
-
-var (
-	ErrNotFound          = errors.New("models: resource not found")
-	ErrIDInvalid         = errors.New("models: ID provided was invalid")
-	ErrPasswordIncorrect = errors.New("models: incorrect password provided")
-	ErrEmailRequired     = errors.New("models: email address is required")
-	ErrEmailInvalid      = errors.New("models: email address is not valid")
-	ErrEmailTaken        = errors.New("models: email address is already taken")
-	ErrPasswordRequired  = errors.New("models: password is required")
-	ErrPasswordTooShort  = errors.New("models: password must be at least 8 characters long")
-	ErrRememberRequired  = errors.New("models: remember token is required")
-	ErrRememberTooShort  = errors.New("models: remember token must be at least 32 bytes")
 )
 
 const userPwPepper = "secret-random-string"
