@@ -27,3 +27,11 @@ func String(nBytes int) (string, error) {
 func RememberToken() (string, error) {
 	return String(RememberTokenBytes)
 }
+
+func NBytes(base64String string) (int, error) {
+	b, err := base64.URLEncoding.DecodeString(base64String)
+	if err != nil {
+		return -1, err
+	}
+	return len(b), nil
+}
