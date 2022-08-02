@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/gosmartwizard/Venkata_Karthikeya/controllers"
+	"github.com/gosmartwizard/Venkata_Karthikeya/middleware"
 	"github.com/gosmartwizard/Venkata_Karthikeya/models"
 	"net/http"
 )
@@ -46,6 +47,10 @@ func main() {
 	usersC := controllers.NewUsers(services.User)
 	galleriesC := controllers.NewGalleries(services.Gallery)
 
+	requireUserMw := middleware.RequireUser{
+		UserService: services.User,
+	}
+
 	r := mux.NewRouter()
 	r.NotFoundHandler = http.HandlerFunc(notFound)
 
@@ -59,8 +64,8 @@ func main() {
 	r.Handle("/login", usersC.LoginView).Methods("GET")
 	r.HandleFunc("/login", usersC.Login).Methods("POST")
 
-	r.Handle("/galleries/new", galleriesC.New).Methods("GET")
-	r.HandleFunc("/galleries", galleriesC.Create).Methods("POST")
+	r.Handle("/galleries/new", requireUserMw.Apply(galleriesC.New)).Methods("GET")
+	r.HandleFunc("/galleries", requireUserMw.ApplyFn(galleriesC.Create)).Methods("POST")
 
 	fmt.Println("Web Server started")
 	http.ListenAndServe(":4949", r)
