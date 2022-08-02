@@ -60,6 +60,7 @@ func main() {
 	r.HandleFunc("/login", usersC.Login).Methods("POST")
 
 	r.Handle("/galleries/new", galleriesC.New).Methods("GET")
+	r.HandleFunc("/galleries", galleriesC.Create).Methods("POST")
 
 	fmt.Println("Web Server started")
 	http.ListenAndServe(":4949", r)
