@@ -1,6 +1,9 @@
 package views
 
-import "github.com/gosmartwizard/Venkata_Karthikeya/models"
+import (
+	"github.com/gosmartwizard/Venkata_Karthikeya/models"
+	"log"
+)
 
 const (
 	AlertLvlError   = "danger"
@@ -28,6 +31,7 @@ func (d *Data) SetAlert(err error) {
 			Message: pErr.Public(),
 		}
 	} else {
+		log.Println(err)
 		d.Alert = &Alert{
 			Level:   AlertLvlError,
 			Message: AlertMsgGeneric,
