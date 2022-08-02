@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"github.com/gosmartwizard/Venkata_Karthikeya/context"
 	"github.com/gosmartwizard/Venkata_Karthikeya/models"
 	"net/http"
@@ -30,7 +29,6 @@ func (mw *RequireUser) ApplyFn(next http.HandlerFunc) http.HandlerFunc {
 		ctx := r.Context()
 		ctx = context.WithUser(ctx, user)
 		r = r.WithContext(ctx)
-		fmt.Println("User found: ", user)
 		next(w, r)
 	})
 }
