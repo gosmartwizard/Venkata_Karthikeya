@@ -48,8 +48,11 @@ func main() {
 	usersC := controllers.NewUsers(services.User)
 	galleriesC := controllers.NewGalleries(services.Gallery, r)
 
-	requireUserMw := middleware.RequireUser{
+	userMw := middleware.User{
 		UserService: services.User,
+	}
+	requireUserMw := middleware.RequireUser{
+		User: userMw,
 	}
 
 	r.NotFoundHandler = http.HandlerFunc(notFound)
@@ -72,5 +75,5 @@ func main() {
 	r.HandleFunc("/galleries/{id:[0-9]+}", galleriesC.Show).Methods("GET").Name(controllers.ShowGallery)
 
 	fmt.Println("Web Server started")
-	http.ListenAndServe(":4949", r)
+	http.ListenAndServe(":4949", userMw.Apply(r))
 }
