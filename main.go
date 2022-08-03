@@ -31,7 +31,14 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 func main() {
 	cfg := DefaultConfig()
 	dbCfg := DefaultPostgresConfig()
-	services, err := models.NewServices(dbCfg.Dialect(), dbCfg.ConnectionInfo())
+	services, err := models.NewServices(
+		models.WithGorm(dbCfg.Dialect(), dbCfg.ConnectionInfo()),
+		models.WithLogMode(!cfg.IsProd()),
+		models.WithUser(cfg.Pepper, cfg.HMACKey),
+		models.WithGallery(),
+		models.WithImage(),
+	)
+
 	must(err)
 	defer services.Close()
 	services.AutoMigrate()
