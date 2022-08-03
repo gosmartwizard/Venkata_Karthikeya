@@ -2,6 +2,7 @@ package views
 
 import (
 	"github.com/gosmartwizard/Venkata_Karthikeya/models"
+	"html/template"
 	"log"
 )
 
@@ -21,6 +22,7 @@ type Alert struct {
 type Data struct {
 	Alert *Alert
 	User  *models.User
+	CSRF  template.HTML
 	Yield interface{}
 }
 

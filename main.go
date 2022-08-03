@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"
 	"github.com/gosmartwizard/Venkata_Karthikeya/controllers"
 	"github.com/gosmartwizard/Venkata_Karthikeya/middleware"
 	"github.com/gosmartwizard/Venkata_Karthikeya/models"
+	"github.com/gosmartwizard/Venkata_Karthikeya/rand"
 	"net/http"
 )
 
@@ -48,6 +50,10 @@ func main() {
 	usersC := controllers.NewUsers(services.User)
 	galleriesC := controllers.NewGalleries(services.Gallery, services.Image, r)
 
+	isProd := false
+	b, err := rand.Bytes(32)
+	must(err)
+	csrfMw := csrf.Protect(b, csrf.Secure(isProd))
 	userMw := middleware.User{
 		UserService: services.User,
 	}
@@ -84,5 +90,5 @@ func main() {
 	r.HandleFunc("/galleries/{id:[0-9]+}", galleriesC.Show).Methods("GET").Name(controllers.ShowGallery)
 
 	fmt.Println("Web Server started")
-	http.ListenAndServe(":4949", userMw.Apply(r))
+	http.ListenAndServe(":4949", csrfMw(userMw.Apply(r)))
 }
