@@ -4,7 +4,6 @@ import (
 	"github.com/gosmartwizard/Venkata_Karthikeya/hash"
 	"github.com/gosmartwizard/Venkata_Karthikeya/rand"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"golang.org/x/crypto/bcrypt"
 	"regexp"
 	"strings"
